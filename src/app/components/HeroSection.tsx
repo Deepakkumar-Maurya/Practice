@@ -1,6 +1,40 @@
-import Link from "next/link";
+// import Link from "next/link";
+
+// export default function HeroSection() {
+//   return (
+//     <header className="bg-blue-600 text-white text-center py-20">
+//       <h2 className="text-4xl font-bold">
+//         Secure Your Keys, Passwords & Secrets
+//       </h2>
+//       <p className="mt-4 text-lg">
+//         Your ultimate encrypted key storage solution
+//       </p>
+//       <Link
+//         href="/register"
+//         className="mt-6 inline-block bg-white text-blue-600 px-6 py-3 rounded-md font-semibold hover:bg-gray-200"
+//       >
+//         Get Started
+//       </Link>
+//     </header>
+//   );
+// }
+
+"use client"; // Ensure this runs on the client side
+
+import { useRouter } from "next/navigation"; // Import Next.js router
+import useWallet from "@/app/hooks/useWallet";
 
 export default function HeroSection() {
+  const { connectWallet } = useWallet();
+  const router = useRouter(); // Initialize Next.js router
+
+  const handleGetStarted = async () => {
+    const account = await connectWallet(); // Wait for wallet connection
+    if (account) {
+      router.push("/register"); // Redirect after connection
+    }
+  };
+
   return (
     <header className="bg-blue-600 text-white text-center py-20">
       <h2 className="text-4xl font-bold">
@@ -9,12 +43,12 @@ export default function HeroSection() {
       <p className="mt-4 text-lg">
         Your ultimate encrypted key storage solution
       </p>
-      <Link
-        href="/register"
-        className="mt-6 inline-block bg-white text-blue-600 px-6 py-3 rounded-md font-semibold hover:bg-gray-200"
+      <button
+        onClick={handleGetStarted}
+        className="mt-6 bg-white text-blue-600 px-6 py-3 rounded-md font-semibold hover:bg-gray-200"
       >
         Get Started
-      </Link>
+      </button>
     </header>
   );
 }

@@ -6,7 +6,7 @@ export default function Security() {
       <h2 className="text-3xl font-bold">Top-Notch Security</h2>
       <p className="mt-4 text-lg text-gray-700">Your data is protected with military-grade encryption and zero-knowledge architecture.</p>
       <div className="mt-8 flex justify-center">
-        <Image src="/security.png" alt="Security" width={400} height={300} />
+        <Image src="/images/security.png" alt="Security" width={400} height={300} />
       </div>
     </section>
   );

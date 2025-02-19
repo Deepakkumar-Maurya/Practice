@@ -8,6 +8,8 @@ import Testimonials from "@/app/components/Testimonials";
 import CTA from "@/app/components/CTA";
 import Footer from "@/app/components/Footer";
 
+import useWallet from "@/app/hooks/useWallet";
+
 export default function Home() {
   return (
     <div className="bg-gray-50 min-h-screen">
