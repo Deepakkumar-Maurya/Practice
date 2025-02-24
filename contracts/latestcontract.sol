@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-contract BlockCapsule {
+contract KeyNode {
     struct User {
         string nationalId;
         string passkeyHash;
