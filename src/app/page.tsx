@@ -1,14 +1,14 @@
-import Navbar from "@/app/components/Navbar";
-import HeroSection from "@/app/components/HeroSection";
-import AboutSection from "@/app/components/AboutSection";
-import Features from "@/app/components/Features";
-import HowItWorks from "@/app/components/HowItWorks";
-import Security from "@/app/components/Security";
-import Testimonials from "@/app/components/Testimonials";
-import CTA from "@/app/components/CTA";
-import Footer from "@/app/components/Footer";
+import Navbar from "@/components/Navbar";
+import HeroSection from "@/components/HeroSection";
+import AboutSection from "@/components/AboutSection";
+import Features from "@/components/Features";
+import HowItWorks from "@/components/HowItWorks";
+import Security from "@/components/Security";
+import Testimonials from "@/components/Testimonials";
+import CTA from "@/components/CTA";
+import Footer from "@/components/Footer";
 
-import useWallet from "@/app/hooks/useWallet";
+import useWallet from "@/hooks/useWallet";
 
 export default function Home() {
   return (

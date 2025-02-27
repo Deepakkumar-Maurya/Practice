@@ -4,15 +4,15 @@ export default function Navbar() {
   return (
     <nav className="bg-white shadow-md">
       <div className="container mx-auto px-6 py-4 flex justify-between items-center">
-        <h1 className="text-2xl font-bold text-blue-600">Key Node</h1>
+        <h1 className="text-2xl font-bold text-blue-600 cursor-pointer">Key Node</h1>
         <div className="space-x-6">
-          <Link href="#about" className="text-gray-700 hover:text-blue-600">
+          <Link href="#about" className="hidden sm:inline-block text-gray-700 hover:text-blue-600">
             About Us
           </Link>
-          <Link href="#services" className="text-gray-700 hover:text-blue-600">
+          <Link href="#services" className="hidden sm:inline-block text-gray-700 hover:text-blue-600">
             Services
           </Link>
-          <Link href="#contact" className="text-gray-700 hover:text-blue-600">
+          <Link href="#contact" className="hidden sm:inline-block text-gray-700 hover:text-blue-600">
             Contact
           </Link>
         </div>
