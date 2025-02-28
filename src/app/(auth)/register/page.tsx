@@ -3,12 +3,16 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useGlobal } from "@/hooks/useGlobal";
 
 export default function Signup() {
+  const { account } = useGlobal()
   const [formData, setFormData] = useState({ nationalId: "", passkey: "" });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+
+  console.log("------", account)
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -43,11 +47,11 @@ export default function Signup() {
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="bg-white p-8 rounded-lg shadow-lg w-96">
         <h2 className="text-2xl font-bold text-center text-blue-600 mb-4">Create an Account</h2>
-        
+
         {error && <p className="text-red-500 text-sm text-center">{error}</p>}
-        
+
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-        <label htmlFor="nationalId">National ID</label>
+          <label htmlFor="nationalId">National ID</label>
           <input
             type="nationalId"
             name="nationalId"
