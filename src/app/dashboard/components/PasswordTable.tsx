@@ -33,7 +33,7 @@
 //   }
 
 // ----------------------------------
-  
+
 
 // "use client";
 // import { useState } from "react";
@@ -105,9 +105,21 @@
 
 "use client";
 
+import { useGlobal } from "@/hooks/useGlobal";
 import { useState } from "react";
 
 export default function RecoveryPhraseList() {
+  const { account, nationalId, passKey } = useGlobal();
+
+  const fetchStoredKeys = async () => {
+    try {
+      const storedKeys = await window.contract.methods.fetchPasswords(nationalId, passKey).call({from : account});
+      console.log("Stored Keys:", storedKeys);
+    } catch (error) {
+      console.error("Error fetching stored keys:", error);
+    }
+  };
+
   const storedPhrases = [
     {
       name: "Wallet Backup 1",

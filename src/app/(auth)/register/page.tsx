@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useGlobal } from "@/hooks/useGlobal";
 
 export default function Signup() {
-  const { account } = useGlobal()
+  const { account, setNationalId, setPassKey } = useGlobal()
   const [formData, setFormData] = useState({ nationalId: "", passkey: "" });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -24,18 +24,23 @@ export default function Signup() {
     setLoading(true);
 
     try {
-      const response = await fetch("http://localhost:5000/api/auth/signup", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
+      setNationalId(formData.nationalId);
+      setPassKey(formData.passkey);
+      await window.contract.methods.register(formData.nationalId, formData.passkey, "", "", "").send({from : account});
+      console.log("Registered account:", account);
 
-      const data = await response.json();
+      // const response = await fetch("http://localhost:5000/api/auth/signup", {
+      //   method: "POST",
+      //   headers: { "Content-Type": "application/json" },
+      //   body: JSON.stringify(formData),
+      // });
 
-      if (!response.ok) throw new Error(data.message || "Something went wrong.");
+      // const data = await response.json();
 
-      alert("Signup successful! You can now log in.");
-      router.push("/login");
+      // if (!response.ok) throw new Error(data.message || "Something went wrong.");
+
+      // alert("Signup successful! You can now log in.");
+      router.push("/dashboard"); // Redirect after signup
     } catch (error: any) {
       setError(error.message);
     } finally {

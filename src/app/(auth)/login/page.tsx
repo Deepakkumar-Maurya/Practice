@@ -3,11 +3,13 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useGlobal } from "@/hooks/useGlobal";
 
 export default function Login() {
   const [formData, setFormData] = useState({ nationalId: "", passkey: "" });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const { account, setNationalId, setPassKey } = useGlobal();
   const router = useRouter();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -20,15 +22,19 @@ export default function Login() {
     setLoading(true);
 
     try {
-      const response = await fetch("http://localhost:5000/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
+      setNationalId(formData.nationalId);
+      setPassKey(formData.passkey);
+      await window.contract.methods.login(formData.nationalId, formData.passkey).send({from : account});
+      console.log("Logged in account:", account);
+      // const response = await fetch("http://localhost:5000/api/auth/login", {
+      //   method: "POST",
+      //   headers: { "Content-Type": "application/json" },
+      //   body: JSON.stringify(formData),
+      // });
 
-      const data = await response.json();
+      // const data = await response.json();
 
-      if (!response.ok) throw new Error(data.message || "Invalid credentials.");
+      // if (!response.ok) throw new Error(data.message || "Invalid credentials.");
 
       alert("Login successful!");
       router.push("/dashboard"); // Redirect after login

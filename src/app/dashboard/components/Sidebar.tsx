@@ -2,8 +2,11 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useGlobal } from "@/hooks/useGlobal";
 
 export default function Sidebar() {
+  const { account, nationalId, passKey } = useGlobal();
+
   const [isPhraseModalOpen, setIsPhraseModalOpen] = useState(false);
   const [isAccountModalOpen, setIsAccountModalOpen] = useState(false);
 
@@ -33,17 +36,50 @@ export default function Sidebar() {
   };
 
   // Handle secret phrase form submission
-  const handlePhraseSubmit = (e: React.FormEvent) => {
+  const handlePhraseSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Stored Phrase:", { name: phraseName, phrase: phraseWords });
-    setIsPhraseModalOpen(false); // Close modal after submission
+    
+    try {
+      const phraseObj = {
+        name: phraseName,
+        phrase: phraseWords,
+      };
+  
+      await window.contract.methods
+        .storePassword(nationalId, passKey, JSON.stringify(phraseObj))
+        .send({ from: account });
+  
+      console.log("Stored Phrase:", JSON.stringify(phraseObj));
+  
+      setIsPhraseModalOpen(false); // Close modal after successful submission
+    } catch (error) {
+      console.error("Error storing phrase:", error);
+      alert("Failed to store phrase. Please try again.");
+    }
   };
 
   // Handle account settings form submission
-  const handleAccountSubmit = (e: React.FormEvent) => {
+  const handleAccountSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Updated Account Details:", accountDetails);
-    setIsAccountModalOpen(false); // Close modal after submission
+  
+    try {
+      await window.contract.methods
+        .editUserDetails(
+          accountDetails.nationalId,
+          accountDetails.secretHash,
+          accountDetails.name,
+          accountDetails.phone,
+          accountDetails.address
+        )
+        .send({ from: account });
+  
+      console.log("Updated Account Details:", accountDetails);
+  
+      setIsAccountModalOpen(false); // Close modal after successful submission
+    } catch (error) {
+      console.error("Error updating account details:", error);
+      alert("Failed to update account details. Please try again.");
+    }
   };
 
   return (

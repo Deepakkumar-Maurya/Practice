@@ -23,14 +23,18 @@
 
 import { useRouter } from "next/navigation"; // Import Next.js router
 import useWallet from "@/hooks/useWallet";
+import { useGlobal } from "@/hooks/useGlobal";
+
 
 export default function HeroSection() {
   const { connectWallet } = useWallet();
   const router = useRouter(); // Initialize Next.js router
+  const { setAccount } = useGlobal();
 
   const handleGetStarted = async () => {
-    const account = await connectWallet(); // Wait for wallet connection
+    const account = await connectWallet();
     if (account) {
+      setAccount(account[0]);
       router.push("/register"); // Redirect after connection
     }
   };
@@ -38,7 +42,7 @@ export default function HeroSection() {
   return (
     <header className="bg-blue-600 text-white text-center py-20">
       <h2 className="text-4xl font-bold">
-      Keep your keys safe and protected from unauthorized access.
+        Keep your keys safe and protected from unauthorized access.
       </h2>
       <p className="mt-4 text-lg">
         Your ultimate encrypted key storage solution
