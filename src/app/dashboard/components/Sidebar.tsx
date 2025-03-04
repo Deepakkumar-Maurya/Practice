@@ -41,6 +41,7 @@ export default function Sidebar() {
             .call({ from: account });
           
           console.log('===kkk', Object.keys(details)); 
+          localStorage.setItem("name", details[0]);
 
           setAccountDetails({
             name: details[0] || "",
@@ -121,6 +122,8 @@ export default function Sidebar() {
           accountDetails.address
         )
         .send({ from: account });
+      
+      localStorage.setItem("name", accountDetails.name);
 
       console.log("Updated Account Details:", accountDetails);
 
@@ -137,9 +140,9 @@ export default function Sidebar() {
         {/* User Info */}
         <div className="text-center my-5">
           <div className="w-20 h-20 mx-auto bg-blue-600 text-white rounded-full flex items-center justify-center text-xl font-bold">
-            U
+            {localStorage.getItem("name")?.charAt(0) ?? "J"}
           </div>
-          <h3 className="mt-3 text-lg font-semibold">John Doe</h3>
+          <h3 className="mt-3 text-lg font-semibold">{localStorage.getItem("name") ?? "John Doe"}</h3>
           {/* <p className="text-sm text-gray-500">john@example.com</p> */}
         </div>
 
