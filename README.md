@@ -26,7 +26,7 @@ Ensure you have the following dependencies installed before running the project:
 
 1️⃣ **Clone the repository**  
 ```sh
-git clone https://github.com/Deepakkumar-maurya/keynode.git
+git clone https://github.com/Deepakkumar-Maurya/Practice.git
 cd keynode
 ```
 
