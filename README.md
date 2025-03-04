@@ -1,36 +1,104 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# **KeyNode - Blockchain-Based Key Management System** 🔑
 
-## Getting Started
+KeyNode is a decentralized **Key Management System (KMS)** leveraging **Blockchain** technology for enhanced security, transparency, and immutability. This project ensures secure storage and retrieval of cryptographic keys without relying on centralized authorities.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## 🚀 **Getting Started**
+
+### **Prerequisites**  
+Ensure you have the following dependencies installed before running the project:  
+
+- **Node.js v20.15.0** → [Download Node.js](https://nodejs.org/)  
+- **Truffle v5.6.8** → Install globally using:  
+  ```sh
+  npm install -g truffle@5.6.8
+  ```
+- **Ganache v7.5.0** → Download & install from [Truffle Suite](https://trufflesuite.com/ganache/)  
+- **Web3.js v1.7.4** → Install globally using:  
+  ```sh
+  npm install -g web3.js@1.7.4
+  ```
+
+---
+
+## 🛠️ **Installation & Setup**
+
+1️⃣ **Clone the repository**  
+```sh
+git clone https://github.com/Deepakkumar-maurya/keynode.git
+cd keynode
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2️⃣ **Install dependencies**  
+```sh
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3️⃣ **Start Ganache**  
+- Open **Ganache** and create a new workspace  
+- Configure **Truffle** to connect to Ganache in `truffle-config.js`
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+4️⃣ **Compile Smart Contracts**  
+```sh
+truffle compile
+```
 
-## Learn More
+5️⃣ **Deploy Contracts to Ganache**  
+```sh
+truffle migrate
+```
 
-To learn more about Next.js, take a look at the following resources:
+6️⃣ **Start the Application**  
+```sh
+npm run dev
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## ✨ **Features**
+- 🔐 **Decentralized Key Management**  
+- 🔑 **Secure Key Storage on Blockchain**  
+- 📜 **Smart Contract-Based Authorization**  
+- ⚡ **Fast and Efficient Transactions**  
+- 🛡️ **Eliminates Single Point of Failure**  
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🏗️ **Technologies Used**
+- **Solidity** (Smart Contracts)
+- **Truffle** (Development & Testing Framework)
+- **Ganache** (Local Blockchain Simulation)
+- **Web3.js** (Blockchain Interaction)
+- **Next.js** (Fullstack)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## 📌 **Usage Guide**
+1. Register and generate a secure key  
+2. Store the key on the blockchain  
+3. Retrieve the key when needed  
+4. Share access securely with authorized users  
+
+---
+
+## 👥 **Contributing**
+Want to contribute? Follow these steps:  
+1. **Fork** the repository  
+2. **Create** a new branch (`feature-xyz`)  
+3. **Commit** your changes (`git commit -m "Added new feature"`)  
+4. **Push** to your fork  
+5. **Create a Pull Request (PR)**  
+
+---
+
+## 📄 **License**
+This project is open-source and available under the **MIT License**.
+
+---
+
+## 📞 **Contact**
+For any questions or support, feel free to reach out:  
+📧 **Email:** mauryadeepaktg2@gmail.com  
+🐙 **GitHub:** [yourusername](https://github.com/Deepakkumar-Maurya)  
+🔗 **LinkedIn:** [yourprofile](https://linkedin.com/in/yourprofile)  
