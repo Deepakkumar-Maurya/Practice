@@ -1,108 +1,3 @@
-// export default function PasswordTable() {
-//     return (
-//       <div className="mt-6 bg-white shadow-md rounded-md p-4">
-//         <table className="w-full">
-//           <thead>
-//             <tr className="border-b">
-//               <th className="text-left py-2">Website</th>
-//               <th className="text-left py-2">Username</th>
-//               <th className="text-left py-2">Actions</th>
-//             </tr>
-//           </thead>
-//           <tbody>
-//             <tr className="border-b">
-//               <td className="py-2">github.com</td>
-//               <td className="py-2">johndoe</td>
-//               <td className="py-2">
-//                 <button className="text-blue-600 hover:underline mr-3">Edit</button>
-//                 <button className="text-red-600 hover:underline">Delete</button>
-//               </td>
-//             </tr>
-//             <tr>
-//               <td className="py-2">gmail.com</td>
-//               <td className="py-2">johndoe@gmail.com</td>
-//               <td className="py-2">
-//                 <button className="text-blue-600 hover:underline mr-3">Edit</button>
-//                 <button className="text-red-600 hover:underline">Delete</button>
-//               </td>
-//             </tr>
-//           </tbody>
-//         </table>
-//       </div>
-//     );
-//   }
-
-// ----------------------------------
-
-
-// "use client";
-// import { useState } from "react";
-
-// export default function RecoveryPhraseTable() {
-//   // Example Secret Recovery Phrase (BIP-39 words)
-//   const recoveryPhrase = [
-//     "pioneer", "volcano", "globe", "jaguar", "midnight", "whisper",
-//     "orchard", "tornado", "yellow", "moment", "wisdom", "galaxy"
-//   ];
-
-//   // State to toggle visibility
-//   const [isVisible, setIsVisible] = useState(false);
-
-//   return (
-//     <div className="mt-6 bg-white shadow-md rounded-md p-6 max-w-lg mx-auto">
-//       <h2 className="text-xl font-semibold text-center text-gray-800">
-//         🔑 Secret Recovery Phrase
-//       </h2>
-//       <p className="text-sm text-red-600 text-center mt-2">
-//         ⚠ Never share this phrase. Anyone with this can access your wallet!
-//       </p>
-
-//       {/* Toggle Button */}
-//       <div className="flex justify-center mt-4">
-//         <button
-//           className="px-4 py-2 text-white bg-blue-600 hover:bg-blue-700 rounded-md"
-//           onClick={() => setIsVisible(!isVisible)}
-//         >
-//           {isVisible ? "🔒 Hide" : "🔓 Reveal"}
-//         </button>
-//       </div>
-
-//       {/* Secret Phrase Table */}
-//       {isVisible && (
-//         <table className="w-full mt-4 border-collapse border border-gray-300">
-//           <tbody>
-//             {recoveryPhrase.map((word, index) => (
-//               <tr key={index} className="border-b border-gray-200">
-//                 <td className="py-2 px-4 font-semibold">{index + 1}.</td>
-//                 <td className="py-2 px-4 font-mono text-lg bg-gray-100 rounded-md">
-//                   {word}
-//                 </td>
-//                 <td className="py-2 px-4">
-//                   <button
-//                     className="text-blue-600 hover:underline text-sm"
-//                     onClick={() => navigator.clipboard.writeText(word)}
-//                   >
-//                     📋 Copy
-//                   </button>
-//                 </td>
-//               </tr>
-//             ))}
-//           </tbody>
-//         </table>
-//       )}
-
-//       {/* Security Note */}
-//       <p className="text-gray-600 text-sm mt-4 text-center">
-//         Store this phrase securely offline. Do not share it with anyone.
-//       </p>
-//     </div>
-//   );
-// }
-
-
-// -----------------------------
-
-
 "use client";
 
 import { useGlobal } from "@/hooks/useGlobal";
@@ -133,40 +28,14 @@ export default function RecoveryPhraseList() {
 
   // const [selectedPhrase, setSelectedPhrase] = useState<string[] | null>(null);/
 
-  const { account, nationalId, passKey } = useGlobal();
-  // const [storedPhrases, setStoredPhrases] = useState<{ name: string; phrase: string[] }[]>([]);
+  const { fetchStoredKeys, storedPhrases } = useGlobal();
   const [selectedPhrase, setSelectedPhrase] = useState<string[] | null>(null);
 
-  // // Fetch stored keys from contract
-  // const fetchStoredKeys = useCallback(async () => {
-  //   if (!account || !nationalId || !passKey) {
-  //     console.warn("Missing required data for fetchStoredKeys.");
-  //     return;
-  //   }
-
-  //   try {
-  //     const storedKeys = await window.contract.methods
-  //       .fetchPasswords(nationalId, passKey)
-  //       .call({ from: account });
-
-  //     console.log("Fetched Stored Keys:", storedKeys);
-
-  //     // Convert storedKeys into required format
-  //     const updatedPhrases = storedKeys.map((key: string, index: number) => ({
-  //       name: `Stored Backup ${index + 1}`,
-  //       phrase: key.split(" "), // Assuming keys are space-separated
-  //     }));
-
-  //     setStoredPhrases(updatedPhrases);
-  //   } catch (error) {
-  //     console.error("Error fetching stored keys:", error);
-  //   }
-  // }, [account, nationalId, passKey]);
-
-  // Fetch stored keys on mount & when dependencies change
   useEffect(() => {
-    fetchStoredKeys();
-  }, [fetchStoredKeys]);
+    fetchStoredKeys(); // Call function when component mounts
+    console.log("Stored Phrases:===>1234", storedPhrases);
+  }, []);
+
 
   return (
     <div className="max-w-full mx-auto mt-6 p-6 bg-white shadow-md rounded-md">

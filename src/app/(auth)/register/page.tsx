@@ -33,17 +33,6 @@ export default function Signup() {
       await window.contract.methods.register(formData.nationalId, formData.passkey, "", "", "").send({from : account});
       console.log("Registered account:", account);
 
-      // const response = await fetch("http://localhost:5000/api/auth/signup", {
-      //   method: "POST",
-      //   headers: { "Content-Type": "application/json" },
-      //   body: JSON.stringify(formData),
-      // });
-
-      // const data = await response.json();
-
-      // if (!response.ok) throw new Error(data.message || "Something went wrong.");
-
-      // alert("Signup successful! You can now log in.");
       router.push("/dashboard"); // Redirect after signup
     } catch (error: any) {
       setError(error.message);

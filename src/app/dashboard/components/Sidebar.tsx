@@ -1,11 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useGlobal } from "@/hooks/useGlobal";
+import Web3 from "web3";
+import { CONTRACT_ABI, CONTRACT_ADDRESS } from "@/app-constant/constant";
 
 export default function Sidebar() {
-  const { account, nationalId, passKey } = useGlobal();
+  const { account, nationalId, passKey, fetchStoredKeys } = useGlobal();
 
   const [isPhraseModalOpen, setIsPhraseModalOpen] = useState(false);
   const [isAccountModalOpen, setIsAccountModalOpen] = useState(false);
@@ -30,27 +32,74 @@ export default function Sidebar() {
     setPhraseWords(updatedWords);
   };
 
+  useEffect(() => {
+    if (isAccountModalOpen) {
+      const fetchAccountDetails = async () => {
+        try {
+          const details = await window.contract.methods
+            .getUserDetails(nationalId, passKey)
+            .call({ from: account });
+          
+          console.log('===kkk', Object.keys(details)); 
+
+          setAccountDetails({
+            name: details[0] || "",
+            nationalId: nationalId || "",
+            secretHash: passKey || "",
+            phone: details[1] || "",
+            address: details[2] || "",
+          });
+        } catch (error) {
+          console.error("Error fetching account details:", error);
+        }
+      };
+
+      fetchAccountDetails();
+    }
+  }, [isAccountModalOpen]);
+
   // Handle change in account settings inputs
-  const handleAccountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setAccountDetails({ ...accountDetails, [e.target.name]: e.target.value });
+  // const handleAccountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   setAccountDetails({ ...accountDetails, [e.target.name]: e.target.value });
+  // };
+  const handleAccountChange = (e) => {
+    const { name, value } = e.target;
+    setAccountDetails((prev) => ({ ...prev, [name]: value }));
   };
+
+  window.web3 = new Web3(window.ethereum);
+  window.contract = new window.web3.eth.Contract(
+    CONTRACT_ABI,
+    CONTRACT_ADDRESS
+  );
 
   // Handle secret phrase form submission
   const handlePhraseSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
+    if (!account || !nationalId || !passKey) {
+      alert("Missing required information. Please check your inputs.");
+      return;
+    }
+
     try {
       const phraseObj = {
         name: phraseName,
         phrase: phraseWords,
       };
-  
+
+      console.log("===>", phraseObj);
+      console.log("===>", JSON.stringify(phraseObj));
+      console.log("====>", account, nationalId, passKey);
+
       await window.contract.methods
         .storePassword(nationalId, passKey, JSON.stringify(phraseObj))
         .send({ from: account });
-  
+
       console.log("Stored Phrase:", JSON.stringify(phraseObj));
-  
+
+      await fetchStoredKeys();
+
       setIsPhraseModalOpen(false); // Close modal after successful submission
     } catch (error) {
       console.error("Error storing phrase:", error);
@@ -61,7 +110,7 @@ export default function Sidebar() {
   // Handle account settings form submission
   const handleAccountSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-  
+
     try {
       await window.contract.methods
         .editUserDetails(
@@ -72,9 +121,9 @@ export default function Sidebar() {
           accountDetails.address
         )
         .send({ from: account });
-  
+
       console.log("Updated Account Details:", accountDetails);
-  
+
       setIsAccountModalOpen(false); // Close modal after successful submission
     } catch (error) {
       console.error("Error updating account details:", error);
@@ -96,10 +145,16 @@ export default function Sidebar() {
 
         {/* Navigation Links */}
         <nav className="my-5 space-y-2">
-          <Link href="#" className="block px-4 py-1 text-gray-700 hover:bg-gray-200 rounded-md">
+          <Link
+            href="#"
+            className="block px-4 py-1 text-gray-700 hover:bg-gray-200 rounded-md"
+          >
             🔑 My Keys
           </Link>
-          <Link href="#" className="block px-4 py-1 text-gray-700 hover:bg-gray-200 rounded-md">
+          <Link
+            href="#"
+            className="block px-4 py-1 text-gray-700 hover:bg-gray-200 rounded-md"
+          >
             🔒 Security Settings
           </Link>
           <button
@@ -122,10 +177,17 @@ export default function Sidebar() {
       {/* Secret Phrase Modal */}
       {isPhraseModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center p-4">
-          <div className="bg-white p-6 rounded-lg shadow-lg max-w-lg w-full" onClick={(e) => e.stopPropagation()}>
-            <h3 className="text-xl font-semibold text-gray-800 text-center">🔑 Store a New Recovery Phrase</h3>
+          <div
+            className="bg-white p-6 rounded-lg shadow-lg max-w-lg w-full"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h3 className="text-xl font-semibold text-gray-800 text-center">
+              🔑 Store a New Recovery Phrase
+            </h3>
             <form onSubmit={handlePhraseSubmit} className="mt-4">
-              <label className="block text-gray-700 font-medium">Phrase Name:</label>
+              <label className="block text-gray-700 font-medium">
+                Phrase Name:
+              </label>
               <input
                 type="text"
                 className="w-full border p-2 rounded-md mt-1"
@@ -148,10 +210,17 @@ export default function Sidebar() {
                 ))}
               </div>
               <div className="flex justify-between mt-6">
-                <button type="button" className="px-4 py-2 bg-red-500 text-white rounded-md" onClick={() => setIsPhraseModalOpen(false)}>
+                <button
+                  type="button"
+                  className="px-4 py-2 bg-red-500 text-white rounded-md"
+                  onClick={() => setIsPhraseModalOpen(false)}
+                >
                   Cancel
                 </button>
-                <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded-md">
+                <button
+                  type="submit"
+                  className="px-4 py-2 bg-blue-600 text-white rounded-md"
+                >
                   ✅ Save Phrase
                 </button>
               </div>
@@ -161,12 +230,19 @@ export default function Sidebar() {
       )}
 
       {/* Account Settings Modal */}
-      {isAccountModalOpen && (
+      {/* {isAccountModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center p-4">
-          <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full" onClick={(e) => e.stopPropagation()}>
-            <h3 className="text-xl font-semibold text-gray-800 text-center">⚙️ Update Account Settings</h3>
+          <div
+            className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h3 className="text-xl font-semibold text-gray-800 text-center">
+              ⚙️ Update Account Settings
+            </h3>
             <form onSubmit={handleAccountSubmit} className="mt-4">
-              <label className="block text-gray-700 font-medium">Full Name:</label>
+              <label className="block text-gray-700 font-medium">
+                Full Name:
+              </label>
               <input
                 type="text"
                 name="name"
@@ -177,7 +253,9 @@ export default function Sidebar() {
                 required
               />
 
-              <label className="block text-gray-700 font-medium mt-2">National ID:</label>
+              <label className="block text-gray-700 font-medium mt-2">
+                National ID:
+              </label>
               <input
                 type="text"
                 name="nationalId"
@@ -188,7 +266,9 @@ export default function Sidebar() {
                 required
               />
 
-              <label className="block text-gray-700 font-medium mt-2">Secret Hash:</label>
+              <label className="block text-gray-700 font-medium mt-2">
+                Secret Hash:
+              </label>
               <input
                 type="text"
                 name="secretHash"
@@ -199,7 +279,9 @@ export default function Sidebar() {
                 required
               />
 
-              <label className="block text-gray-700 font-medium mt-2">Phone Number:</label>
+              <label className="block text-gray-700 font-medium mt-2">
+                Phone Number:
+              </label>
               <input
                 type="text"
                 name="phone"
@@ -210,7 +292,9 @@ export default function Sidebar() {
                 required
               />
 
-              <label className="block text-gray-700 font-medium mt-2">Address:</label>
+              <label className="block text-gray-700 font-medium mt-2">
+                Address:
+              </label>
               <input
                 type="text"
                 name="address"
@@ -222,10 +306,113 @@ export default function Sidebar() {
               />
 
               <div className="flex justify-between mt-6">
-                <button type="button" className="px-4 py-2 bg-red-500 text-white rounded-md" onClick={() => setIsAccountModalOpen(false)}>
+                <button
+                  type="button"
+                  className="px-4 py-2 bg-red-500 text-white rounded-md"
+                  onClick={() => setIsAccountModalOpen(false)}
+                >
                   Cancel
                 </button>
-                <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded-md">
+                <button
+                  type="submit"
+                  className="px-4 py-2 bg-blue-600 text-white rounded-md"
+                >
+                  ✅ Save Changes
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )} */}
+      {isAccountModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center p-4">
+          <div
+            className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h3 className="text-xl font-semibold text-gray-800 text-center">
+              ⚙️ Update Account Settings
+            </h3>
+            <form onSubmit={handleAccountSubmit} className="mt-4">
+              <label className="block text-gray-700 font-medium">
+                Full Name:
+              </label>
+              <input
+                type="text"
+                name="name"
+                className="w-full border p-2 rounded-md mt-1"
+                placeholder="Enter your full name"
+                value={accountDetails.name}
+                onChange={handleAccountChange}
+                required
+              />
+
+              <label className="block text-gray-700 font-medium mt-2">
+                National ID:
+              </label>
+              <input
+                type="text"
+                name="nationalId"
+                className="w-full border p-2 rounded-md mt-1"
+                placeholder="Enter National ID"
+                value={accountDetails.nationalId}
+                onChange={handleAccountChange}
+                readOnly
+                required
+              />
+
+              <label className="block text-gray-700 font-medium mt-2">
+                Secret Hash:
+              </label>
+              <input
+                type="text"
+                name="secretHash"
+                className="w-full border p-2 rounded-md mt-1"
+                placeholder="Enter Secret Hash"
+                value={accountDetails.secretHash}
+                onChange={handleAccountChange}
+                readOnly
+                required
+              />
+
+              <label className="block text-gray-700 font-medium mt-2">
+                Phone Number:
+              </label>
+              <input
+                type="text"
+                name="phone"
+                className="w-full border p-2 rounded-md mt-1"
+                placeholder="Enter Phone Number"
+                value={accountDetails.phone}
+                onChange={handleAccountChange}
+                required
+              />
+
+              <label className="block text-gray-700 font-medium mt-2">
+                Address:
+              </label>
+              <input
+                type="text"
+                name="address"
+                className="w-full border p-2 rounded-md mt-1"
+                placeholder="Enter Address"
+                value={accountDetails.address}
+                onChange={handleAccountChange}
+                required
+              />
+
+              <div className="flex justify-between mt-6">
+                <button
+                  type="button"
+                  className="px-4 py-2 bg-red-500 text-white rounded-md"
+                  onClick={() => setIsAccountModalOpen(false)}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-2 bg-blue-600 text-white rounded-md"
+                >
                   ✅ Save Changes
                 </button>
               </div>

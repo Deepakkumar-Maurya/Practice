@@ -1,7 +1,7 @@
 const testimonials = [
-    { name: "Alice Johnson", review: "This password manager is a game-changer! I feel so secure." },
-    { name: "Mark Williams", review: "Easy to use and incredibly reliable. Highly recommend!" },
-    { name: "Sophia Brown", review: "No more forgetting secret keys! Love the autofill feature." },
+    { name: "Jos Buttler", review: "This password manager is a game-changer! I feel so secure." },
+    { name: "Emma Watson", review: "Easy to use and incredibly reliable. Highly recommend!" },
+    { name: "Andrew Garfield", review: "No more forgetting secret keys! Love the autofill feature." },
 ];
 
 export default function Testimonials() {

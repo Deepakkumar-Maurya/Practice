@@ -64,7 +64,8 @@ export default function useWallet() {
           return selectedAccount; // Return account address
         }
       } catch (error) {
-        console.error("Error connecting to MetaMask:", error);
+        // console.error("Error connecting to MetaMask:", error);
+        alert("Error connecting to MetaMask. Please try again.");
         return null;
       }
     } else {
