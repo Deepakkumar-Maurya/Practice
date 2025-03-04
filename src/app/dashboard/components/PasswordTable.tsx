@@ -134,34 +134,34 @@ export default function RecoveryPhraseList() {
   // const [selectedPhrase, setSelectedPhrase] = useState<string[] | null>(null);/
 
   const { account, nationalId, passKey } = useGlobal();
-  const [storedPhrases, setStoredPhrases] = useState<{ name: string; phrase: string[] }[]>([]);
+  // const [storedPhrases, setStoredPhrases] = useState<{ name: string; phrase: string[] }[]>([]);
   const [selectedPhrase, setSelectedPhrase] = useState<string[] | null>(null);
 
-  // Fetch stored keys from contract
-  const fetchStoredKeys = useCallback(async () => {
-    if (!account || !nationalId || !passKey) {
-      console.warn("Missing required data for fetchStoredKeys.");
-      return;
-    }
+  // // Fetch stored keys from contract
+  // const fetchStoredKeys = useCallback(async () => {
+  //   if (!account || !nationalId || !passKey) {
+  //     console.warn("Missing required data for fetchStoredKeys.");
+  //     return;
+  //   }
 
-    try {
-      const storedKeys = await window.contract.methods
-        .fetchPasswords(nationalId, passKey)
-        .call({ from: account });
+  //   try {
+  //     const storedKeys = await window.contract.methods
+  //       .fetchPasswords(nationalId, passKey)
+  //       .call({ from: account });
 
-      console.log("Fetched Stored Keys:", storedKeys);
+  //     console.log("Fetched Stored Keys:", storedKeys);
 
-      // Convert storedKeys into required format
-      const updatedPhrases = storedKeys.map((key: string, index: number) => ({
-        name: `Stored Backup ${index + 1}`,
-        phrase: key.split(" "), // Assuming keys are space-separated
-      }));
+  //     // Convert storedKeys into required format
+  //     const updatedPhrases = storedKeys.map((key: string, index: number) => ({
+  //       name: `Stored Backup ${index + 1}`,
+  //       phrase: key.split(" "), // Assuming keys are space-separated
+  //     }));
 
-      setStoredPhrases(updatedPhrases);
-    } catch (error) {
-      console.error("Error fetching stored keys:", error);
-    }
-  }, [account, nationalId, passKey]);
+  //     setStoredPhrases(updatedPhrases);
+  //   } catch (error) {
+  //     console.error("Error fetching stored keys:", error);
+  //   }
+  // }, [account, nationalId, passKey]);
 
   // Fetch stored keys on mount & when dependencies change
   useEffect(() => {
