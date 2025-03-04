@@ -34,6 +34,8 @@
 //   return { account, connectWallet };
 // }
 
+// ------------------------------------
+
 import { useState, useEffect } from "react";
 
 export default function useWallet() {
@@ -73,3 +75,4 @@ export default function useWallet() {
 
   return { account, connectWallet };
 }
+

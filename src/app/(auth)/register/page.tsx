@@ -4,6 +4,8 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useGlobal } from "@/hooks/useGlobal";
+import { CONTRACT_ABI, CONTRACT_ADDRESS } from "@/app-constant/constant";
+import Web3 from "web3";
 
 export default function Signup() {
   const { account, setNationalId, setPassKey } = useGlobal()
@@ -13,6 +15,8 @@ export default function Signup() {
   const router = useRouter();
 
   console.log("------", account)
+  window.web3 = new Web3(window.ethereum);
+  window.contract = new window.web3.eth.Contract(CONTRACT_ABI, CONTRACT_ADDRESS);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });

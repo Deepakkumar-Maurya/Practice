@@ -29,12 +29,14 @@ import { useGlobal } from "@/hooks/useGlobal";
 export default function HeroSection() {
   const { connectWallet } = useWallet();
   const router = useRouter(); // Initialize Next.js router
-  const { setAccount } = useGlobal();
+  const { account, setAccount } = useGlobal();
 
   const handleGetStarted = async () => {
     const account = await connectWallet();
     if (account) {
-      setAccount(account[0]);
+      console.log("Connected account:123", account);
+      setAccount(account);
+      console.log('--->....', account);
       router.push("/register"); // Redirect after connection
     }
   };
