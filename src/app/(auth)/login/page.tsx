@@ -24,7 +24,8 @@ export default function Login() {
     try {
       setNationalId(formData.nationalId);
       setPassKey(formData.passkey);
-      await window.contract.methods.login(formData.nationalId, formData.passkey).send({from : account});
+      const result = await window.contract.methods.login(formData.nationalId, formData.passkey).send({from : account});
+      console.log(result);
       console.log("Logged in account:", account);
 
       alert("Login successful!");

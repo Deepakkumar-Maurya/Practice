@@ -93,10 +93,11 @@ export default function Sidebar() {
       console.log("===>", JSON.stringify(phraseObj));
       console.log("====>", account, nationalId, passKey);
 
-      await window.contract.methods
+      const result = await window.contract.methods
         .storePassword(nationalId, passKey, JSON.stringify(phraseObj))
         .send({ from: account });
 
+      console.log("Stored Phrase Result:", result);
       console.log("Stored Phrase:", JSON.stringify(phraseObj));
 
       await fetchStoredKeys();
@@ -113,7 +114,7 @@ export default function Sidebar() {
     e.preventDefault();
 
     try {
-      await window.contract.methods
+      const result = await window.contract.methods
         .editUserDetails(
           accountDetails.nationalId,
           accountDetails.secretHash,
@@ -125,6 +126,7 @@ export default function Sidebar() {
       
       localStorage.setItem("name", accountDetails.name);
 
+      console.log("Updated Account Result:", result);
       console.log("Updated Account Details:", accountDetails);
 
       setIsAccountModalOpen(false); // Close modal after successful submission

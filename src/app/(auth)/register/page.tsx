@@ -30,7 +30,8 @@ export default function Signup() {
     try {
       setNationalId(formData.nationalId);
       setPassKey(formData.passkey);
-      await window.contract.methods.register(formData.nationalId, formData.passkey, "", "", "").send({from : account});
+      const result = await window.contract.methods.register(formData.nationalId, formData.passkey, "", "", "").send({from : account});
+      console.log(result);
       console.log("Registered account:", account);
 
       router.push("/dashboard"); // Redirect after signup
