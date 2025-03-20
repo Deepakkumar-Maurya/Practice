@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.20;
+pragma solidity ^0.8.0;
 
 contract AddressIndependentAuth {
     struct User {
@@ -17,6 +17,7 @@ contract AddressIndependentAuth {
     event PasswordStored(address indexed user, string password);
     event PasswordEdited(address indexed user, uint index);
     event PasswordDeleted(address indexed user, uint index);
+    event UserDetailsUpdated(address indexed user);
 
     // Function to register a user with National ID and Passkey Hash
     function register(
@@ -77,6 +78,15 @@ contract AddressIndependentAuth {
     function getStoredPasswords(string memory _nationalId, string memory _passkeyHash) external view returns (string[] memory) {
         require(authenticate(_nationalId, _passkeyHash), "Authentication failed");
         return storedPasswords[_nationalId];
+    }
+
+    // 📝 Edit user details
+    function editUserDetails(string memory _nationalId, string memory _passkeyHash, string memory _name, string memory _phone, string memory _otherDetails) external {
+        require(authenticate(_nationalId, _passkeyHash), "Authentication failed");
+        users[_nationalId].name = _name;
+        users[_nationalId].phone = _phone;
+        users[_nationalId].otherDetails = _otherDetails;
+        emit UserDetailsUpdated(msg.sender);
     }
 
     // Function to retrieve user details

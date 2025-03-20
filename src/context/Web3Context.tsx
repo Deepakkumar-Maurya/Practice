@@ -95,7 +95,7 @@ const GlobalContextProvider = ({ children }: { children: React.ReactNode }) => {
         CONTRACT_ADDRESS
       );
       const storedKeys = await window.contract.methods
-        .fetchPasswords(nationalId, passKey)
+        .getStoredPasswords(nationalId, passKey)
         .call({ from: account });
 
       console.log("Fetched Stored Keys:", storedKeys);
